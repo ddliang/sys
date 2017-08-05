@@ -60,7 +60,7 @@
 										<div class="widget-main">
 											<h4 class="header blue lighter bigger">
 												<i class="icon-coffee green"></i>
-												管理员登陆22
+												管理员登陆
 											</h4>
 
 											<div class="login_icon"><img src="/sys/images/login.png" /></div>
