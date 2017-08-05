@@ -64,7 +64,7 @@
 											</h4>
 
 											<div class="login_icon"><img src="/sys/images/login.png" /></div>
-											<form id="form1" action="${pageContext.request.contextPath }/user/login.do" method="post">
+											<form id="form1" action="${pageContext.request.contextPath }/user/login.do" method="post" enctype="multipart/form-data">
 											<%--<form class="" id="form1" action="${baseurl}user/login.do">--%>
 												<fieldset>
 										<ul>
