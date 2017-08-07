@@ -64,7 +64,7 @@ public class UserController {
             System.out.println("共有商品信息：" + total);
             System.out.println("共有多少页：" + pageInfo.getPages());
               /* 分页测试结束*/
-            //request.getSession().setAttribute("user", user);
+            request.getSession().setAttribute("url", "home.jsp");
             return "index";
         }catch(Exception e){
             e.printStackTrace();
@@ -77,5 +77,10 @@ public class UserController {
     public String loginSuccess(Model model){
         System.out.println("登录成功了");
         return "sucess";
+    }
+    @RequestMapping("/home")
+    public String home(Model model){
+        System.out.println("-------------------------");
+        return "home";
     }
 }
