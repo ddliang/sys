@@ -52,8 +52,9 @@ public class UserController {
 
         try{
             subject.login(token);
-            PageHelper.startPage(1, 2);
-            List<SysUser> list = sysUserService.selectByPage();
+           /* 分页测试开始*/
+            PageHelper.startPage(1, 10);
+            List<SysUser> list = sysUserService.selectByPage5("0");
             for (SysUser user: list) {
                 System.out.println(user.getUsername());
             }
@@ -61,6 +62,8 @@ public class UserController {
             PageInfo<SysUser> pageInfo = new PageInfo<SysUser>(list);
             long total = pageInfo.getTotal(); //获取总记录数
             System.out.println("共有商品信息：" + total);
+            System.out.println("共有多少页：" + pageInfo.getPages());
+              /* 分页测试结束*/
             //request.getSession().setAttribute("user", user);
             return "index";
         }catch(Exception e){

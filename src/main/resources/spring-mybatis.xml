@@ -55,9 +55,31 @@
 	<!-- myBatis文件 -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
-		<property name="configLocation" value="classpath:mybatis-config.xml"/>
+		<!--刚开始用的4.x的分页插件，注释后用的5.x 版本的分页插件-->
+		<!--<property name="configLocation" value="classpath:mybatis-config.xml"/>-->
 		<!-- 自动扫描entity目录, 省掉Configuration.xml里的手工配置 -->
 		<property name="mapperLocations" value="classpath:com/**/mapping/*.xml" />
+		<!--分页插件5.x的版本必须配置在sqlSessionFactory里面-->
+		<property name="plugins">
+			<array>
+				<bean class="com.github.pagehelper.PageInterceptor">
+					<!--这里的几个配置主要演示如何使用，如果不理解，一定要去掉下面的配置 helperDialect：有别于3.0+版本，
+					现在必须是helperDialect，否则spring启动加载时会报错-->
+					<property name="properties">
+						<value>
+							helperDialect=mysql
+							reasonable=true
+							supportMethodsArguments=true
+							params=count=countSql
+							autoRuntimeDialect=true
+						</value>
+					</property>
+				</bean>
+			</array>
+		</property>
+	</bean>
+	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactory" />
 	</bean>
 
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">

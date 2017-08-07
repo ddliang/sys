@@ -11,20 +11,12 @@
   	
   </typeAliases>
 
-  <!-- 配置分页插件 -->
+  <!-- 配置分页插件4.x的版本 -->
   <plugins>
     <plugin interceptor="com.github.pagehelper.PageHelper">
       <!-- 设置数据库类型 Oracle,Mysql,MariaDB,SQLite,Hsqldb,PostgreSQL六种数据库-->
       <property name="dialect" value="mysql"/>
     </plugin>
   </plugins>
- <!-- 
- <mappers>
-    <mapper resource="mapper/StudentMapper.xml"/>
- </mappers>
-    <plugins>  
-       <plugin interceptor="net.wenyifan.common.mybatis.plugin.PageInterceptor">    
-       </plugin>  
-    </plugins>    
--->
+
 </configuration>

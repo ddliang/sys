@@ -13,4 +13,6 @@ public interface SysUserMapper {
 
     List<SysUser> selectByPage();
 
+    List<SysUser> selectByPage5(String id);
+
 }

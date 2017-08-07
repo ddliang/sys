@@ -13,4 +13,6 @@ public interface SysUserService {
     List<SysUser> selectByExample();
 
     List<SysUser> selectByPage();
+
+    List<SysUser> selectByPage5(String id);
 }

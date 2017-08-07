@@ -22,6 +22,12 @@
     select id, usercode, username, password, salt, locked from sys_user
   </select>
 
+  <select id="selectByPage5" resultMap="BaseResultMap"  parameterType="java.lang.String">
+    select u.* from sys_user u
+     join sys_user_role r on r.sys_user_id=u.id
+    where usercode = #{id,jdbcType=VARCHAR}
+  </select>
+
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />

@@ -25,4 +25,8 @@ public class SysUserServiceImpl implements SysUserService{
     public List<SysUser> selectByPage() {
         return userDao.selectByPage();
     }
+
+    public List<SysUser> selectByPage5(String id) {
+        return userDao.selectByPage5(id);
+    }
 }
