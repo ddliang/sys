@@ -2,7 +2,9 @@ package com.sys.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.sys.entity.SysPermission;
 import com.sys.entity.SysUser;
+import com.sys.service.SysPermissionService;
 import com.sys.service.SysUserService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -23,6 +25,8 @@ import java.util.List;
 public class UserController {
     @Autowired
     private SysUserService sysUserService;
+    @Autowired
+    private SysPermissionService permissionService;
     @RequestMapping(value = "/login")
     public String login(HttpServletRequest request )throws Exception{
 
@@ -52,8 +56,13 @@ public class UserController {
 
         try{
             subject.login(token);
+
+            List<SysPermission> list = permissionService.findMenuListByUserId("5");
+            for (SysPermission permission : list) {
+                System.out.println(permission.getUrl());
+            }
            /* 分页测试开始*/
-            PageHelper.startPage(1, 10);
+           /* PageHelper.startPage(1, 10);
             List<SysUser> list = sysUserService.selectByPage5("0");
             for (SysUser user: list) {
                 System.out.println(user.getUsername());
@@ -62,7 +71,7 @@ public class UserController {
             PageInfo<SysUser> pageInfo = new PageInfo<SysUser>(list);
             long total = pageInfo.getTotal(); //获取总记录数
             System.out.println("共有商品信息：" + total);
-            System.out.println("共有多少页：" + pageInfo.getPages());
+            System.out.println("共有多少页：" + pageInfo.getPages());*/
               /* 分页测试结束*/
             request.getSession().setAttribute("url", "home.jsp");
             return "index";
@@ -73,14 +82,18 @@ public class UserController {
         }
     }
 
-    @RequestMapping("/loginSuc")
-    public String loginSuccess(Model model){
-        System.out.println("登录成功了");
-        return "sucess";
-    }
+    /**
+     * 首页跳转
+     * @param model
+     * @return
+     */
     @RequestMapping("/home")
     public String home(Model model){
         System.out.println("-------------------------");
         return "home";
+    }
+
+    public String userList(){
+        return null;
     }
 }
