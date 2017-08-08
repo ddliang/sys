@@ -1,5 +1,8 @@
 package com.sys.controller;
 
+import com.alibaba.druid.support.json.JSONUtils;
+import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.sys.entity.SysPermission;
@@ -58,6 +61,8 @@ public class UserController {
             subject.login(token);
 
             List<SysPermission> list = permissionService.findMenuListByUserId("5");
+            String json = JSONObject.toJSONString(list);
+            System.out.println(json);
             for (SysPermission permission : list) {
                 System.out.println(permission.getUrl());
             }
@@ -73,7 +78,7 @@ public class UserController {
             System.out.println("共有商品信息：" + total);
             System.out.println("共有多少页：" + pageInfo.getPages());*/
               /* 分页测试结束*/
-            request.getSession().setAttribute("url", "home.jsp");
+            request.getSession().setAttribute("menuList", "json");
             return "index";
         }catch(Exception e){
             e.printStackTrace();
@@ -92,8 +97,9 @@ public class UserController {
         System.out.println("-------------------------");
         return "home";
     }
-
+    @RequestMapping("/userList")
     public String userList(){
-        return null;
+
+        return "/admin/administrator";
     }
 }
