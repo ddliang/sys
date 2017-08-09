@@ -1,4 +1,4 @@
-﻿<%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" %>
+﻿<%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" isELIgnored="false"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <c:set var="baseUrl" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -44,14 +44,35 @@
 		<script src="${pageContext.request.contextPath}/assets/laydate/laydate.js" type="text/javascript"></script>
         <script src="${pageContext.request.contextPath}/js/jquery.nicescroll.js" type="text/javascript"></script>
         
-<script type="text/javascript">	
- $(function(){ 
+<script type="text/javascript">
+	//ajax获取菜单列表方法开始(未用)
+		function  getMenuList() {
+				$.ajax({
+                    type:'POST',
+                    url:'${baseUrl}/user/menuList.do',
+                    data:{},
+                    dataType:'json',
+                    success:function(data){
+
+                       for (var i = 0; i < data.menu.length; i++){
+								//alert(data.menu[i].name)
+                           $("#nav_list").append(
+                           "<li><a href='#' class='dropdown-toggle'><i class='icon-desktop'></i><span class='menu-text'> "+data.menu[i].name+"</span><b class='arrow icon-angle-down'></b></a></li>"
+                           );
+                       }
+                    },
+				});
+        }
+    //ajax获取菜单列表方法结束
+
+ $(function(){
+    // getMenuList(); 调用ajax 方法加载菜单
  var cid = $('#nav_list> li>.submenu');
 	  cid.each(function(i){ 
        $(this).attr('id',"Sort_link_"+i);
    
     })  
- })
+ });
  jQuery(document).ready(function(){ 	
     $.each($(".submenu"),function(){
 	var $aobjs=$(this).children("li");
@@ -59,8 +80,15 @@
 	var divHeigth=$(this).height();
     $aobjs.height(divHeigth/rowCount);
   });
-    //菜单加载
+    //菜单加载开始
 
+
+    /* var jsonarray= $.parseJSON(menuList);
+     $.each(jsonarray, function (i, n)
+     {
+         alert(n.name);
+     }*/
+	//菜单加载结束
 
     //初始化宽度、高度
 
@@ -364,7 +392,7 @@ function link_operating(name,title){
 					</div><!-- #sidebar-shortcuts -->
 					<div id="menu_style" class="menu_style">
 					<ul class="nav nav-list" id="nav_list">
-				   <%--  <li class="home"><a href="javascript:void(0)" name="home.html" class="iframeurl" title=""><i class="icon-home"></i><span class="menu-text"> 系统首页 </span></a></li>--%>
+				    <li class="home"><a href="javascript:void(0)" name="home.html" class="iframeurl" title=""><i class="icon-home"></i><span class="menu-text"> 系统首页 </span></a></li>
                      <%--<li><a href="#" class="dropdown-toggle"><i class="icon-desktop"></i><span class="menu-text"> 产品管理 </span><b class="arrow icon-angle-down"></b></a>
 					   <ul class="submenu">
                          <li class="home"><a  href="javascript:void(0)" name="Products_List.html"  title="产品类表" class="iframeurl"><i class="icon-double-angle-right"></i>产品类表</a></li>

@@ -1,6 +1,8 @@
 package com.sys.controller;
 
 import com.alibaba.druid.support.json.JSONUtils;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.github.pagehelper.PageHelper;
@@ -15,9 +17,13 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.PrintWriter;
 import java.util.List;
 
 /**
@@ -31,7 +37,7 @@ public class UserController {
     @Autowired
     private SysPermissionService permissionService;
     @RequestMapping(value = "/login")
-    public String login(HttpServletRequest request )throws Exception{
+    public String login(HttpServletRequest request, ModelMap model)throws Exception{
 
         /*//如果登陆失败从request中获取认证异常信息，shiroLoginFailure就是shiro异常类的全限定名
         String exceptionClassName = (String) request.getAttribute("shiroLoginFailure");
@@ -60,12 +66,7 @@ public class UserController {
         try{
             subject.login(token);
 
-            List<SysPermission> list = permissionService.findMenuListByUserId("5");
-            String json = JSONObject.toJSONString(list);
-            System.out.println(json);
-            for (SysPermission permission : list) {
-                System.out.println(permission.getUrl());
-            }
+
            /* 分页测试开始*/
            /* PageHelper.startPage(1, 10);
             List<SysUser> list = sysUserService.selectByPage5("0");
@@ -78,7 +79,9 @@ public class UserController {
             System.out.println("共有商品信息：" + total);
             System.out.println("共有多少页：" + pageInfo.getPages());*/
               /* 分页测试结束*/
-            request.getSession().setAttribute("menuList", "json");
+           request.getSession().setAttribute("m", "json");
+            //model.addAttribute("m",json);
+           // request.setAttribute("m",json);
             return "index";
         }catch(Exception e){
             e.printStackTrace();
@@ -101,5 +104,23 @@ public class UserController {
     public String userList(){
 
         return "/admin/administrator";
+    }
+    @RequestMapping("/menuList")
+    @ResponseBody
+    public void ajaxMenu(ModelMap model,HttpServletResponse response) throws Exception {
+        JSONObject json = new JSONObject();
+        PrintWriter out=response.getWriter();
+        List<SysPermission> list = permissionService.findMenuListByUserId("5");
+        String str = JSONObject.toJSONString(list);
+
+        for (SysPermission permission : list) {
+            System.out.println(permission.getUrl());
+        }
+        JSONArray array =JSONObject.parseArray(str);
+        System.out.println(array);
+        json.put("menu",array);
+
+        System.out.println("------------------------->>");
+       out.print(json);
     }
 }
