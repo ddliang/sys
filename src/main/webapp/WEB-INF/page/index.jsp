@@ -55,7 +55,7 @@
                     success:function(data){
 
                        for (var i = 0; i < data.menu.length; i++){
-								//alert(data.menu[i].name)
+								alert(data.menu[i].name)
                            $("#nav_list").append(
                            "<li><a href='#' class='dropdown-toggle'><i class='icon-desktop'></i><span class='menu-text'> "+data.menu[i].name+"</span><b class='arrow icon-angle-down'></b></a></li>"
                            );
@@ -66,7 +66,7 @@
     //ajax获取菜单列表方法结束
 
  $(function(){
-    // getMenuList(); 调用ajax 方法加载菜单
+     getMenuList(); //调用ajax 方法加载菜单
  var cid = $('#nav_list> li>.submenu');
 	  cid.each(function(i){ 
        $(this).attr('id',"Sort_link_"+i);
@@ -82,8 +82,8 @@
   });
     //菜单加载开始
 
-
-    /* var jsonarray= $.parseJSON(menuList);
+/*
+     var jsonarray= $.parseJSON(menuList);
      $.each(jsonarray, function (i, n)
      {
          alert(n.name);

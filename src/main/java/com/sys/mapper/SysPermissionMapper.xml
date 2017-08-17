@@ -13,8 +13,8 @@
     <result column="available" property="available" jdbcType="CHAR" />
   </resultMap>
 
-  <!-- 根据用户id查询url -->
-  <select id="findPermissionListByUserId" parameterType="string" resultType="com.sys.entity.SysPermission">
+  <!-- 根据用户id查询子菜单url -->
+  <select id="findPermissionListByUserId" parameterType="Map" resultType="com.sys.entity.SysPermission">
     SELECT
     *
     FROM
@@ -30,10 +30,10 @@
     sys_role_id
     FROM
     sys_user_role
-    WHERE sys_user_id = #{id}))
+    WHERE sys_user_id = #{id} and parentid=#{parentid}))
   </select>
 
-  <!-- 根据用户id查询菜单 -->
+  <!-- 根据用户id查询父菜单 -->
   <select id="findMenuListByUserId"  parameterType="string" resultType="com.sys.entity.SysPermission">
     SELECT
     *
@@ -51,5 +51,13 @@
     FROM
     sys_user_role
     WHERE sys_user_id = #{id}))
+  </select>
+  <!-- 根据用户id查询菜单 -->
+  <select id="findSysUserByUserName"  parameterType="string" resultType="com.sys.entity.SysUser">
+    SELECT
+    u.*
+    FROM
+    sys_user u
+    WHERE u.usercode = #{usercode}
   </select>
 </mapper>

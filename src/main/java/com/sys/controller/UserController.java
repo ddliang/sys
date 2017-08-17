@@ -24,7 +24,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by DaiLiang on 2017/8/2.
@@ -111,6 +114,7 @@ public class UserController {
         JSONObject json = new JSONObject();
         PrintWriter out=response.getWriter();
         List<SysPermission> list = permissionService.findMenuListByUserId("5");
+
         String str = JSONObject.toJSONString(list);
 
         for (SysPermission permission : list) {

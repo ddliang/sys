@@ -1,8 +1,15 @@
 package com.shiro;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import com.alibaba.fastjson.JSON;
+import com.sys.entity.OnLineUser;
+import com.sys.entity.SysPermission;
+import com.sys.entity.SysUser;
+import com.sys.service.SysPermissionService;
 import org.apache.log4j.Logger;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -12,6 +19,7 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * 
@@ -31,6 +39,8 @@ import org.apache.shiro.subject.PrincipalCollection;
  */
 public class CustomRealm extends AuthorizingRealm {
 	private static Logger logger = Logger.getLogger(CustomRealm.class);
+	@Autowired
+	private SysPermissionService sysPermissionService;
 	// 设置realm的名称
 	@Override
 	public void setName(String name) {
@@ -47,26 +57,63 @@ public class CustomRealm extends AuthorizingRealm {
 
 			// token是用户输入的
 			// 第一步从token中取出身份信息
-			String userCode = (String) token.getPrincipal();
+			String usercode = (String) token.getPrincipal();
 			System.out.println("老子进来了");
 			// 第二步：根据用户输入的userCode从数据库查询
 			// ....
 
-
+			SysUser sysUser = new SysUser();
+			sysUser = sysPermissionService.findSysUserByUserName(usercode);
 			// 如果查询不到返回null
 			//数据库中用户账号是zhangsansan
 		/*if(!userCode.equals("zhangsansan")){
 			return null;
 		}*/
-
-
+			// 如果查询不到返回null
+			if(sysUser==null){//
+				return null;
+			}
 			// 模拟从数据库查询到密码
-			String password = "111111";
+			//String password = "111111";
+			String password = sysUser.getPassword();
+			//盐
+			String salt = sysUser.getSalt();
+			//activeUser就是用户身份信息
+			OnLineUser activeUser = new OnLineUser();
 
+			activeUser.setUserid(sysUser.getId());
+			activeUser.setUsercode(sysUser.getUsercode());
+			activeUser.setUsername(sysUser.getUsername());
+
+
+
+			//查询用户用户的父菜单
+			List<SysPermission> menus  = sysPermissionService.findMenuListByUserId(sysUser.getId());
+
+			List<Map<String,List<SysPermission>>> list=new ArrayList<Map<String, List<SysPermission>>>();
+			Map<String,String> param = new HashMap<String, String>();
+			param.put("id",sysUser.getId());
+			//查询子菜单
+			for (SysPermission menu:  menus) {
+				Map<String,List<SysPermission>> map =new HashMap<String, List<SysPermission>>();
+				param.put("parentid",menu.getId().toString());
+				List<SysPermission> permiss=sysPermissionService.findPermissionListByUserId(param);
+				map.put(menu.getName(),permiss);
+				String json = JSON.toJSONString(map);
+				list.add(map);
+				param.remove("parentid");
+			}
+			String json = JSON.toJSONString(list);
+
+
+
+
+			//将用户菜单 设置到activeUser
+			activeUser.setMenus(menus);
 			// 如果查询到返回认证信息AuthenticationInfo
 
 			 simpleAuthenticationInfo = new SimpleAuthenticationInfo(
-					userCode, password, this.getName());
+					 activeUser, password, this.getName());
 			return simpleAuthenticationInfo;
 		}catch (Exception e){
 			StringBuffer sb = new StringBuffer();
