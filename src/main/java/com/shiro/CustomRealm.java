@@ -61,7 +61,9 @@ public class CustomRealm extends AuthorizingRealm {
 			System.out.println("老子进来了");
 			// 第二步：根据用户输入的userCode从数据库查询
 			// ....
-
+			if(usercode==null){//
+				return null;
+			}
 			SysUser sysUser = new SysUser();
 			sysUser = sysPermissionService.findSysUserByUserName(usercode);
 			// 如果查询不到返回null
@@ -70,9 +72,7 @@ public class CustomRealm extends AuthorizingRealm {
 			return null;
 		}*/
 			// 如果查询不到返回null
-			if(sysUser==null){//
-				return null;
-			}
+
 			// 模拟从数据库查询到密码
 			//String password = "111111";
 			String password = sysUser.getPassword();
